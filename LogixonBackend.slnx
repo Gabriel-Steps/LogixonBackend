@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="LogixonBackend.API/LogixonBackend.API.csproj" />
+  <Project Path="LogixonBackend.Application/LogixonBackend.Application.csproj" />
+  <Project Path="LogixonBackend.Domain/LogixonBackend.Domain.csproj" />
+  <Project Path="LogixonBackend.Infra/LogixonBackend.Infra.csproj" />
+</Solution>
