@@ -2,6 +2,7 @@ using LogixonBackend.API.Middleware;
 using LogixonBackend.Application.Services;
 using LogixonBackend.Infra;
 using LogixonBackend.Infra.Repositories.AuthRepositories;
+using LogixonBackend.Infra.Repositories.ProductRepositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<ProjectLogixonDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAuthRepository, AuthRespository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordService>();
 
