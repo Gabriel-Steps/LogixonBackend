@@ -1,4 +1,7 @@
+using LogixonBackend.API.Middleware;
+using LogixonBackend.Application.Services;
 using LogixonBackend.Infra;
+using LogixonBackend.Infra.Repositories.AuthRepositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +13,11 @@ builder.Services.AddDbContext<ProjectLogixonDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IAuthRepository, AuthRespository>();
+builder.Services.AddTransient<TokenService>();
+builder.Services.AddTransient<PasswordService>();
+
 builder.Services.AddOpenApi();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -47,6 +55,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
