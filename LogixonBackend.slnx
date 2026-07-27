@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="docker-compose.yml" />
+  </Folder>
   <Project Path="LogixonBackend.API/LogixonBackend.API.csproj" />
   <Project Path="LogixonBackend.Application/LogixonBackend.Application.csproj" />
   <Project Path="LogixonBackend.Domain/LogixonBackend.Domain.csproj" />

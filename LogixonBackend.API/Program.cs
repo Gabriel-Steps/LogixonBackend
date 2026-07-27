@@ -1,5 +1,6 @@
 using LogixonBackend.API.Middleware;
 using LogixonBackend.Application.Services;
+using LogixonBackend.Application.Services.CacheServices;
 using LogixonBackend.Infra;
 using LogixonBackend.Infra.Repositories.AuthRepositories;
 using LogixonBackend.Infra.Repositories.CategoryRepositories;
@@ -10,6 +11,7 @@ using LogixonBackend.Infra.Repositories.SupplierRepositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IStockMovementsRepository, StockMovementsRepository>();
 builder.Services.AddScoped<IStockAlertRepository, StockAlertRepository>();
+builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordService>();
 
@@ -35,6 +38,12 @@ builder.Services.AddMediatR(cfg =>
         typeof(ApplicationAssemblyReference).Assembly
     )
 );
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "logixon_";
+});
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key")!);
@@ -68,6 +77,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("documentation");
 }
 
 app.UseHttpsRedirection();
