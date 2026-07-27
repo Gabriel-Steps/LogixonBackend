@@ -4,6 +4,9 @@ using LogixonBackend.Infra;
 using LogixonBackend.Infra.Repositories.AuthRepositories;
 using LogixonBackend.Infra.Repositories.CategoryRepositories;
 using LogixonBackend.Infra.Repositories.ProductRepositories;
+using LogixonBackend.Infra.Repositories.StockAlertRepositories;
+using LogixonBackend.Infra.Repositories.StockMovementsRepositories;
+using LogixonBackend.Infra.Repositories.SupplierRepositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,10 +22,19 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthRepository, AuthRespository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IStockMovementsRepository, StockMovementsRepository>();
+builder.Services.AddScoped<IStockAlertRepository, StockAlertRepository>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordService>();
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(
+        typeof(ApplicationAssemblyReference).Assembly
+    )
+);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key")!);
