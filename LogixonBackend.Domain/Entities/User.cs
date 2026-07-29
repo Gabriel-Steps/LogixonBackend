@@ -8,6 +8,7 @@
         public string FullName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
+        public string Role { get; set; } = string.Empty;
 
         public ICollection<StockMovement> StockMovements { get; set; }
     }

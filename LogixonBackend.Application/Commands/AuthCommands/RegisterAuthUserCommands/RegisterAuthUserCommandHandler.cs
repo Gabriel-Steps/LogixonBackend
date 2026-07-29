@@ -26,7 +26,8 @@ namespace LogixonBackend.Application.Commands.AuthCommands.RegisterAuthUserComma
                 FullName = request.FullName,
                 Email = request.Email,
                 CreatedAt = DateTime.UtcNow,
-                IsActive = true
+                IsActive = true,
+                Role = "user"
             };
 
             user.PasswordHash = _passwordService.HashPassword(user, request.Password);

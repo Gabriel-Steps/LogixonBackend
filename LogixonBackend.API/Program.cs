@@ -45,6 +45,15 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "logixon_";
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key")!);
 
@@ -67,7 +76,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
 
         ValidIssuer = jwtSettings["Issuer"],
-        ValidAudience = jwtSettings["Audience"]
+        ValidAudience = jwtSettings["Audience"],
+
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -81,6 +92,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
